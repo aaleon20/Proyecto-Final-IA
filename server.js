@@ -1,7 +1,7 @@
 //Install express server
 const express = require('express');
 const path = require('path');
-
+console.log('Express');
 const app = express();
 const nameApp = 'app-proyecto-ia'
 // Serve only the static files form the dist directory
