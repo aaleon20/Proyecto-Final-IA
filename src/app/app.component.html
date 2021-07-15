@@ -1,0 +1,103 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <div class="title">
+        Proyecto Final IA - Reconomiento de Emociones 😊 1.1
+      </div>
+    </div>
+    <div class="card-body shadow">
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <div class="cam">
+            <app-video-player 
+            [stream]="currentStream"
+            [width]="dimensionVideo.width"
+            [height]="dimensionVideo.height"
+          ></app-video-player>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-3">
+  <div class="card">
+    <div class="card-header">
+      <div class="title">
+        Lista de Clientes
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col">Fecha Ultima Lectura</th>
+                  <th scope="col">Hora Ultima Lectura</th>
+                  <th scope="col">Expresión</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Andres Leon</td>
+                  <td>13/07/2021</td>
+                  <td>20:17:00</td>
+                  <td>Neutral</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Katherin Vasquez</td>
+                  <td>13/07/2022</td>
+                  <td>20:20:00</td>
+                  <td>Disgustado</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Angelita</td>
+                  <td>13/07/2021</td>
+                  <td>20:17:00</td>
+                  <td>Temeroso</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Franchesco Guccione</td>
+                  <td>13/07/2021</td>
+                  <td>20:30:00</td>
+                  <td>Temeroso</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Dariana</td>
+                  <td>13/07/2021</td>
+                  <td>20:30:00</td>
+                  <td>Temeroso</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Jhan Franco</td>
+                  <td>13/07/2021</td>
+                  <td>20:30:00</td>
+                  <td>Temeroso</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<app-pie></app-pie>

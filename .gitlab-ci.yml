@@ -1,0 +1,69 @@
+# image: node:13.11.0
+stages:
+  - publish
+  - deploy
+
+variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
+
+# install-dependencies:
+#   stage: install
+#   script:
+#       - npm install
+#   artifacts:
+#       expire_in: 1hr
+#       paths:
+#           - node_modules/
+#   cache:
+#       paths:
+#           - node_modules/
+#   only:
+#     - develop
+
+# test-apps:
+#   stage: test
+#   variables:
+#       CHROME_BIN: google-chrome
+#   dependencies:
+#       - install-dependencies
+#   before_script:
+#       - apt-get update && apt-get install -y apt-transport-https
+#       - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+#       - sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+#       - apt-get update && apt-get install -y google-chrome-stable
+#   script:
+#       - npm run test:ci
+#   only:
+#     - develop
+
+publish:
+  image: docker:latest
+  stage: publish
+  services:
+    - docker:dind
+  script:
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
+  only:
+    - master
+
+deploy:
+  image: alpine:latest
+  stage: deploy
+  tags:
+    - deployment
+  script:
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f my-app || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 80:80 --name my-app $TAG_COMMIT"
+  environment:
+    name: production
+    url: http://147.182.191.179
+  only:
+    - master
