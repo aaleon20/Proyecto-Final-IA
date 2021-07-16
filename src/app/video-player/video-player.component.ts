@@ -1,5 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, Renderer2, OnDestroy } from '@angular/core';
+import { Metrica } from '../core/models/metrica.model';
 import { FaceApiService } from '../core/services/face-api.service';
+import { MetricasService } from '../core/services/metricas.service';
 import { VideoPlayerService } from '../core/services/video-player.service';
 
 @Component({
@@ -20,7 +22,8 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     private renderer2: Renderer2,
     private elementRef: ElementRef,
     private faceApiService: FaceApiService,
-    private videoPlayerService: VideoPlayerService
+    private videoPlayerService: VideoPlayerService,
+    private metricaServices: MetricasService
   ) { 
     
   }
@@ -35,7 +38,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
   checkFace = () => {
     setInterval(async () => {
       await this.videoPlayerService.getLandMark(this.videoElement);
-    }, 1000);
+    }, 3000);
   };
 
   listenerEvents = () => {
@@ -45,29 +48,43 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     });
 
     const observer2$ = this.videoPlayerService.cbAi
-      .subscribe(({resizedDetections, displaySize, expressions, eyes}) => {
+      .subscribe(({resizedDetections, displaySize, expressions, eyes, bestMatch}) => {
         resizedDetections = resizedDetections[0] || null;
         // :TODO Aqui pintamos! dibujamos!
         if (resizedDetections) {
-          this.drawFace(resizedDetections, displaySize, eyes);
+          this.drawFace(resizedDetections, displaySize, eyes, bestMatch, expressions);
         }
       });
 
     this.listEvents = [observer1$, observer2$]
   };
 
-  drawFace = (resizedDetections: any, displaySize: any, eyes: any) => {
+  drawFace = (resizedDetections: any, displaySize: any, eyes: any, bestMatch: any, expressions: any) => {
     const {globalFace} = this.faceApiService;
     this.overCanvas.getContext('2d').clearRect(0, 0, displaySize.width, displaySize.height);
     globalFace.draw.drawDetections(this.overCanvas, resizedDetections);
     //globalFace.draw.drawFaceLandmarks(this.overCanvas, resizedDetections);
-
-    // const scale = this.width / displaySize.width;
-    // console.log(scale);
-
-    // const elementFilterEye = document.querySelector('.filter-eye');
-    // this.renderer2.setStyle(elementFilterEye, 'left', `${eyes.left[0].x * scale}px`);
-    // this.renderer2.setStyle(elementFilterEye, 'top', `${eyes.left[0].y * scale}px`);
+    const minProbability = 0.5;
+    globalFace.draw.drawFaceExpressions(this.overCanvas, resizedDetections, minProbability);
+    
+    const text = [
+      bestMatch,
+    ]
+    const anchor = { x: 200, y: 200 }
+    // see DrawTextField below
+    const drawOptions = {
+      anchorPosition: 'TOP_LEFT',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    }
+    const drawBox = new globalFace.draw.DrawTextField(text, anchor, drawOptions)
+    drawBox.draw(this.overCanvas);
+    console.log(expressions);
+    let metrica: Metrica = {
+      name: bestMatch._label,
+      date: new Date(),
+      expressions: []
+    }
+    this.metricaServices.createMetrica(metrica);
   };
 
   loadedMetaData(){

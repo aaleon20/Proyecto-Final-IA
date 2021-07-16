@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header">
       <div class="title">
-        Proyecto Final IA - Reconomiento de Emociones 😊 1.1
+        Proyecto Final IA - Reconocimiento de Emociones 😊 
       </div>
     </div>
     <div class="card-body shadow">
@@ -24,7 +24,7 @@
   <div class="card">
     <div class="card-header">
       <div class="title">
-        Lista de Clientes
+        Lista de Lecturas
       </div>
     </div>
     <div class="card-body">
@@ -43,54 +43,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Andres Leon</td>
+                <tr *ngFor="let metrica of metricaService.metricas$ | async">
+                  <th scope="row">{{metrica.uid}}</th>
+                  <td>{{metrica.name}}</td>
                   <td>13/07/2021</td>
                   <td>20:17:00</td>
                   <td>Neutral</td>
                   <td></td>
                 </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Katherin Vasquez</td>
-                  <td>13/07/2022</td>
-                  <td>20:20:00</td>
-                  <td>Disgustado</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Angelita</td>
-                  <td>13/07/2021</td>
-                  <td>20:17:00</td>
-                  <td>Temeroso</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Franchesco Guccione</td>
-                  <td>13/07/2021</td>
-                  <td>20:30:00</td>
-                  <td>Temeroso</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Dariana</td>
-                  <td>13/07/2021</td>
-                  <td>20:30:00</td>
-                  <td>Temeroso</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Jhan Franco</td>
-                  <td>13/07/2021</td>
-                  <td>20:30:00</td>
-                  <td>Temeroso</td>
-                  <td></td>
-                </tr>
+                
               </tbody>
             </table>
           </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MetricasService } from './core/services/metricas.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,10 @@ export class AppComponent implements OnInit{
   public currentStream:any;
   public dimensionVideo: any;
   
+  constructor(
+    public metricaService:MetricasService
+  ){}
+
   ngOnInit(): void {
     this.checkMediaSource();
     this.getSizeCam();

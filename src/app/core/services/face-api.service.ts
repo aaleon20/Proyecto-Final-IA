@@ -49,7 +49,7 @@ export class FaceApiService {
     }
 
     //const options = new faceapi.MtcnnOptions(mtcnnParams);
-    const labels = ['Andres Leon','Milagros Leon', 'Shakira'];
+    const labels = ['Andres Leon','Katherine Cardenas', 'Angela Roca', 'Franchesco Guccione', 'Katherin Vasquez'];
     this.labeledFaceDescriptors = await Promise.all(
       labels.map(async label => {
         const imgUrl = `../assets/labeled/${label}/2.jpeg`;

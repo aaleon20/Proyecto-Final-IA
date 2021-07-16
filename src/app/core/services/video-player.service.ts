@@ -50,7 +50,6 @@ export class VideoPlayerService {
       const landmark = detectionsFaces[0].landmarks;
       const expressions = detectionsFaces[0].expressions || null;
       const descriptor = detectionsFaces[0].descriptor;
-      console.log(expressions);
 
       const eyeLeft = landmark.getLeftEye();
       const eyeRight = landmark.getRightEye();
@@ -63,17 +62,18 @@ export class VideoPlayerService {
       //console.log(labeledFaceDescriptors);
 
       //match the face descriptors of the detected faces from our input image to our reference data
-      const faceMatcher = new globalFace.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+      const faceMatcher = new globalFace.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
 
+      let bestMatch: any;
       detectionsFaces.forEach((fd: { descriptor: any; }) => {
-        const bestMatch = faceMatcher.findBestMatch(fd.descriptor)
-        console.log(bestMatch.toString())
+        bestMatch = faceMatcher.findBestMatch(fd.descriptor)
       })
 
       const resizedDetections = globalFace.resizeResults(detectionsFaces, displaySize);
       
       this.cbAi.emit({
         resizedDetections,
+        bestMatch,
         displaySize,
         expressions,
         eyes,
