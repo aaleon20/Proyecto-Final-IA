@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { debounceTime, delay, map, switchMap, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Metrica } from '../models/metrica.model';
+import { Metrica, Result } from '../models/metrica.model';
 
 import { State } from '../models/state.model';
 
@@ -21,7 +21,7 @@ export class MetricasService {
     page: 1,
     pageSize: 15,
     searchTerm: '',
-    sortColumn: 'name',
+    sortColumn: '',
     sortDirection: ''
   }
   constructor(
@@ -48,12 +48,16 @@ export class MetricasService {
   get metricas$() { return this._metricas$.asObservable(); }
 
   getMetricas(): Observable<Metrica[]>{
-    return this.afStore.collection(COLLECTION_NAME, ref => ref.orderBy('date', 'desc').limit(10)).snapshotChanges()
+    return this.afStore.collection(COLLECTION_NAME, ref => ref.orderBy('date_create', 'desc').limit(10)).snapshotChanges()
     .pipe(
       map((metricas) =>
-        metricas.map((metrica) => {
+        metricas.map((metrica: any) => {
           return {
             uid:metrica.payload.doc.id,
+            name:metrica.payload.doc.data()['name'],
+            date:metrica.payload.doc.data()['date'],
+            hour:metrica.payload.doc.data()['hour'],
+            expression:metrica.payload.doc.data()['expression'],
           }
         })
       ),

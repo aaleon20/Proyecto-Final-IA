@@ -46,9 +46,9 @@
                 <tr *ngFor="let metrica of metricaService.metricas$ | async">
                   <th scope="row">{{metrica.uid}}</th>
                   <td>{{metrica.name}}</td>
-                  <td>13/07/2021</td>
-                  <td>20:17:00</td>
-                  <td>Neutral</td>
+                  <td>{{metrica.date}}</td>
+                  <td>{{metrica.hour}}</td>
+                  <td>{{metrica.expression}}</td>
                   <td></td>
                 </tr>
                 
@@ -60,5 +60,5 @@
     </div>
   </div>
 </div>
-<hr>
-<app-pie></app-pie>
+<!-- <hr>
+<app-pie></app-pie> -->
